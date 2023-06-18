@@ -8,5 +8,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/webextension-polyfill": "^0.10.0",
+    "webextension-polyfill": "^0.10.0"
+  }
 }
