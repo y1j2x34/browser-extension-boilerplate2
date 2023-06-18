@@ -1,0 +1,13 @@
+{
+  "extends": ["../../tsconfig.json"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "target": "ES6",
+    "declarationDir": "./dist",
+    "declaration": true,
+    "outDir": "./dist",
+    "paths": {}
+  },
+  "compileOnSave": true,
+  "include": ["./src"]
+}

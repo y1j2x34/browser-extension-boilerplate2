@@ -1,0 +1,6 @@
+%abs {
+  color: red
+}
+body {
+  @extend %abs;
+}

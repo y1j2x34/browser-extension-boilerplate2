@@ -1,0 +1,12 @@
+{
+  "name": "@vgerbot/browser-extension-background",
+  "description": "Background script",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": ""
+}

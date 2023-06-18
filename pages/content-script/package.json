@@ -1,0 +1,22 @@
+{
+  "name": "@vgerbot/browser-extension-content-script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -c webpack.config.ts",
+    "start": "webpack -c ./webpack.dev.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vgerbot/browser-extension-builder": "^1.0.0",
+    "@vgerbot/browser-extension-common": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/webpack-dev-server": "^4.7.2",
+    "html-webpack-plugin": "^5.5.3",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
