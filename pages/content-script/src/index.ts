@@ -1,3 +1,3 @@
 import { hello } from "@vgerbot/browser-extension-common";
 
-console.log(hello);
+console.log(hello, 'world');
