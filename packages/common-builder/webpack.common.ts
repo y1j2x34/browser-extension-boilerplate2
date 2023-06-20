@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
-import {Configuration, WatchIgnorePlugin, SourceMapDevToolPlugin} from 'webpack';
+import {Configuration, WatchIgnorePlugin, SourceMapDevToolPlugin, webpack, ProvidePlugin} from 'webpack';
+import { merge } from 'webpack-merge';
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import ReactRefreshPlugin from "@pmmmwh/react-refresh-webpack-plugin";
@@ -12,19 +13,24 @@ export const isDevelopment = !isProduction;
 
 const RELEASE_PATH = process.env.RELEASE_PATH
 
+export type ExternalConfiguration = Omit<Configuration, 'entry'> & {
+    entry?: string[];
+};
+
 export function config({
     context,
    releaseDirName
 }: {
     context: string;
     releaseDirName: string
-}): Configuration {
-    return {
+}, ...more: ExternalConfiguration[]): Configuration {
+    return merge({
         mode,
         context,
         cache: {
             type: 'filesystem'
         },
+        entry: [resolve(__dirname, './webextension-polyfill.js')],
         watch: isDevelopment,
         output: {
             path: RELEASE_PATH ? resolve(RELEASE_PATH, releaseDirName) : resolve(context, 'dist'),
@@ -101,7 +107,7 @@ export function config({
             new MiniCssExtractPlugin({
                 experimentalUseImportModule: true,
             }),
-            isProduction && new SourceMapDevToolPlugin({
+            isDevelopment && new SourceMapDevToolPlugin({
                 // same as 'source-map'
                 // https://stackoverflow.com/questions/52228650/configure-sourcemapdevtoolplugin-to-generate-source-map/55282204#55282204
                 filename: '[file].map[query]',
@@ -130,5 +136,5 @@ export function config({
                 vm: false
             }
         }
-    }
+    }, ...more);
 }

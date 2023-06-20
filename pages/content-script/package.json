@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@vgerbot/browser-extension-builder": "^1.0.0",
-    "@vgerbot/browser-extension-common": "^1.0.0"
+    "@vgerbot/browser-extension-common": "^1.0.0",
+    "webextension-polyfill": "^0.10.0"
   }
 }

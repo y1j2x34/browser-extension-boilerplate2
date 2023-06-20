@@ -19,9 +19,8 @@ if(isDevelopment) {
         console.log('copy public');
         copyPublicDir().then(done, done);
     });
-} else {
-    await copyPublicDir();
 }
+await copyPublicDir();
 
 function copyPublicDir() {
     return copy(publicDir, path.resolve(currentDir, '../dist/public'), {

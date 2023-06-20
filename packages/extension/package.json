@@ -1,5 +1,6 @@
 {
   "name": "@vgerbot/browser-extension-boilerplate",
+  "displayName": "Browser Extetension Boilerplate",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
