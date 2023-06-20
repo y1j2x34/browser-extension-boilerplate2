@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "types": ["node"],
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -19,5 +25,10 @@
     "jsx": "react-jsx",
     "baseUrl": "."
   },
-  "include": ["src", "**/src", "./**/webpack.*.ts", "packages/extension/scripts"],
+  "include": [
+    "src",
+    "**/src",
+    "./**/webpack.*.ts",
+    "app/scripts"
+  ]
 }

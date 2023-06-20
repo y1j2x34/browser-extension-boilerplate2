@@ -4,8 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build": "yarn workspace @vgerbot/browser-extension-boilerplate build",
-    "start": "yarn workspace @vgerbot/browser-extension-boilerplate start"
+    "build": "yarn workspace @vgerbot/browser-extension build",
+    "start": "yarn workspace @vgerbot/browser-extension start"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,8 @@
   "homepage": "https://github.com/y1j2x34/browser-extension-boilerplate2#readme",
   "workspaces": [
     "packages/**",
-    "pages/**"
+    "pages/**",
+    "app"
   ],
   "packageManager": "^yarn@1.22.19",
   "devDependencies": {
