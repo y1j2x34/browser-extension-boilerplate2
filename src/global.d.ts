@@ -1,9 +1,9 @@
-export * from './manifest-v3';
+import type Browser from 'webextension-polyfill';
 
-import Chrome from 'chrome';
+export type * from './manifest-v3';
 
-declare namespace chrome {
-    export default Chrome;
+declare global {
+    declare const browser: typeof Browser;
 }
 
 declare module '*.svg' {

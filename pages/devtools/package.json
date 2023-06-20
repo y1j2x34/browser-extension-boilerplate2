@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "@types/chrome": "^0.0.237",
-    "@types/webextension-polyfill": "^0.10.0",
     "webextension-polyfill": "^0.10.0"
   }
 }

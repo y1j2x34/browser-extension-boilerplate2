@@ -26,6 +26,7 @@
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@types/chrome": "^0.0.237",
+    "@types/webextension-polyfill": "^0.10.0",
     "autoprefixer": "^10.4.14",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",

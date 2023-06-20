@@ -16,7 +16,6 @@
     "@vgerbot/browser-extension-content-script": "1.0.0",
     "@vgerbot/browser-extension-devtools": "1.0.0",
     "@vgerbot/browser-extension-options": "1.0.0",
-    "@vgerbot/browser-extension-panel": "1.0.0",
     "@vgerbot/browser-extension-popup": "1.0.0",
     "glob-watcher": "^6.0.0"
   },
