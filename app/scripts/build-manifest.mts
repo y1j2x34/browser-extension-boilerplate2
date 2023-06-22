@@ -8,6 +8,7 @@ import { resolve } from "node:path";
 import { existsSync } from "node:fs";
 
 import merge from 'lodash.merge';
+import debounce from 'lodash.debounce';
 import path from "path";
 
 
@@ -41,12 +42,18 @@ const manifest: ManifestTypeV3 = {
 const distDir = path.resolve(path.dirname(import.meta.url).replace(/^file:\/+/, '/'), "../dist")
 
 if(isDevelopment) {
-    watch(distDir, {}).on("change", async (filename) => {
+    const rewriteManifest = debounce(async () => {
+        await writeManifest();
+        console.log('Rewrite of the manifest has been completed');
+    }, 1000, {
+        leading: true,
+        trailing: true
+    })
+    watch(distDir, {}).on("change", (filename) => {
         if(filename.endsWith('manifest.json')) {
             return;
         }
-        await writeManifest();
-        console.log('manifest rewrite done');
+        rewriteManifest();
     })
 }
 

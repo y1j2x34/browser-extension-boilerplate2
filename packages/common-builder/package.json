@@ -6,6 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7",
+    "lodash.debounce": "^4.0.8",
     "sass": "^1.63.4"
   },
   "keywords": [],

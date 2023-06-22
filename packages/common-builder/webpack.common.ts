@@ -1,15 +1,18 @@
-import { resolve } from 'node:path';
-import {Configuration, WatchIgnorePlugin, SourceMapDevToolPlugin, webpack, ProvidePlugin} from 'webpack';
-import { merge } from 'webpack-merge';
+import {resolve} from 'node:path';
+import {Configuration, WatchIgnorePlugin, SourceMapDevToolPlugin, DefinePlugin} from 'webpack';
+import {merge} from 'webpack-merge';
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import ReactRefreshPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ReactRefreshTypeScript from 'react-refresh-typescript';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 export const mode = (process.env.NODE_ENV ?? 'development') as Configuration['mode'];
 export const isProduction = mode === 'production';
 export const isDevelopment = !isProduction;
+
+const isReactProject = false;
 
 const RELEASE_PATH = process.env.RELEASE_PATH
 
@@ -18,9 +21,9 @@ export type ExternalConfiguration = Omit<Configuration, 'entry'> & {
 };
 
 export function config({
-    context,
-   releaseDirName
-}: {
+                           context,
+                           releaseDirName
+                       }: {
     context: string;
     releaseDirName: string
 }, ...more: ExternalConfiguration[]): Configuration {
@@ -30,11 +33,14 @@ export function config({
         cache: {
             type: 'filesystem'
         },
-        entry: [resolve(__dirname, './webextension-polyfill.js')],
+        entry: [resolve(__dirname, './webextension-polyfill.js')].concat(isDevelopment && releaseDirName === 'background' ? [resolve(__dirname, './livereload.js')] : []),
         watch: isDevelopment,
+        watchOptions:{
+            ignored: /dist|node_modules/
+        },
         output: {
             path: RELEASE_PATH ? resolve(RELEASE_PATH, releaseDirName) : resolve(context, 'dist'),
-            filename: 'index.js',
+            filename: 'index-[contenthash].js',
             // webpack process files in memory and because of that vsc can't resolve
             // source maps. The workaround is from
             // https://gist.github.com/jarshwah/389f93f2282a165563990ed60f2b6d6c
@@ -50,60 +56,65 @@ export function config({
                     options: {
                         transpileOnly: true,
                         getCustomTransformers: () => ({
-                            before: isDevelopment ? [ReactRefreshTypeScript()] : []
+                            before: isReactProject && isDevelopment ? [ReactRefreshTypeScript()] : []
                         })
                     }
                 }
             },
-            (isProduction && {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                enforce: 'pre',
-                use: 'source-map-loader'
-            }), {
-                test: /\.scss$/i,
-                // https://stackoverflow.com/questions/55505894/webpack-mini-css-extract-plugin-not-outputting-css-file/60482491#60482491
-                sideEffects: true,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            esModule: false
-                        }
-                    },
-                    'css-loader',
-                    'postcss-loader',
-                    'sass-loader'
-                ]
-            },{
-                test: /\.css$/i,
-                // https://stackoverflow.com/questions/55505894/webpack-mini-css-extract-plugin-not-outputting-css-file/60482491#60482491
-                sideEffects: true,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            esModule: false
-                        }
-                    },
-                    'css-loader',
-                    'postcss-loader'
-                ]
-            }, {
-                test: /\.svg$/,
-                type: 'asset/resource'
-            }],
+                (isProduction && {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    enforce: 'pre',
+                    use: 'source-map-loader'
+                }), {
+                    test: /\.scss$/i,
+                    // https://stackoverflow.com/questions/55505894/webpack-mini-css-extract-plugin-not-outputting-css-file/60482491#60482491
+                    sideEffects: true,
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                esModule: false
+                            }
+                        },
+                        'css-loader',
+                        'postcss-loader',
+                        'sass-loader'
+                    ]
+                }, {
+                    test: /\.css$/i,
+                    // https://stackoverflow.com/questions/55505894/webpack-mini-css-extract-plugin-not-outputting-css-file/60482491#60482491
+                    sideEffects: true,
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                esModule: false
+                            }
+                        },
+                        'css-loader',
+                        'postcss-loader'
+                    ]
+                }, {
+                    test: /\.svg$/,
+                    type: 'asset/resource'
+                }],
         },
         plugins: [
+            new CleanWebpackPlugin({
+                cleanOnceBeforeBuildPatterns: ['*.js', '*.html'],
+            }),
             new WatchIgnorePlugin({
                 paths: [
                     /\.js$/,
                     /\.d\.ts$/,
-                    /\.map$/
+                    /\.map$/,
+                    /dist/,
+                    /node_modules/
                 ]
             }),
             new ForkTsCheckerWebpackPlugin(),
-            isDevelopment && new ReactRefreshPlugin(),
+            isReactProject && isDevelopment && new ReactRefreshPlugin(),
             new MiniCssExtractPlugin({
                 experimentalUseImportModule: true,
             }),
@@ -114,6 +125,9 @@ export function config({
                 // TODO: set url for private deployment
                 // TODO: probably better do that with sed while deployment
                 // publicPath: 'https://api.example.com/project/',
+            }),
+            new DefinePlugin({
+                'process.env.AUTO_RELOAD_PORT': process.env.AUTO_RELOAD_PORT
             })
         ],
         optimization: {

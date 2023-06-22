@@ -7,7 +7,7 @@
   "scripts": {
     "build": "scripts/build.mts",
     "build:manifest": "scripts/build-manifest.mts",
-    "start": "scripts/build.mts --dev"
+    "start": "npx cross-env AUTO_RELOAD_PORT=9909 scripts/build.mts --dev"
   },
   "keywords": [],
   "author": "",
@@ -17,8 +17,7 @@
     "@vgerbot/browser-extension-content-script": "1.0.0",
     "@vgerbot/browser-extension-devtools": "1.0.0",
     "@vgerbot/browser-extension-options": "1.0.0",
-    "@vgerbot/browser-extension-popup": "1.0.0",
-    "glob-watcher": "^6.0.0"
+    "@vgerbot/browser-extension-popup": "1.0.0"
   },
   "devDependencies": {
     "@types/glob-watcher": "^5.0.2",
